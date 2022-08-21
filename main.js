@@ -30,7 +30,7 @@ let shopItemsData = [
 
 //let fakeStoreData = fetch('https://fakestoreapi.com/products').then(resp => resp.json()).then(data => console.log(data))
 
-
+let basket = [];
 
 
 let shopGenerator = () => {
@@ -39,7 +39,7 @@ let shopGenerator = () => {
         return (
             `
     <div id=product-id-${id} class="item">
-    <img width="222" src=${img} alt="items-image">
+    <img width="222" src=${img}  alt="items-image">
     <div class="details">
         <h2>${name}</h2>
         <p>${desc}</p>
@@ -60,6 +60,52 @@ let shopGenerator = () => {
 
 shopGenerator();
 
-let increment = (id) => {console.log(id)}
+let increment = (id ) => {
+    
+    let search = basket.find( x => x.id === id );
+    if (search === undefined){
+        
+        basket.push({
+            id,
+            item : 1
+        })
+         
+    }else{
+        search.item += 1
+    }
+    
+    update(id);
+}
 
-let decrement = (id) => {console.log(id)}
+let decrement = (id) => {
+    let search = basket.find( x => x.id === id );
+   
+    if(search.item === 0) return;
+    else{
+        search.item -= 1 
+    }
+   
+    update(id);
+}
+
+let update = (id) => {
+    let search = basket.find( x => x.id === id );
+    document.getElementById(id).innerHTML = search.item
+    calculation();
+}
+
+
+let calculation = (id) => {
+    let cartIcon = document.getElementById('cartAmount');
+
+    let search = basket.find( x => x.id === id );
+
+    let totalItems = basket.map((x)=> x.item).reduce((x,y)=> x+y,0) ;
+    console.log(totalItems)
+   
+    
+    cartIcon.innerHTML = totalItems;
+    
+
+
+}
